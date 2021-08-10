@@ -1,0 +1,102 @@
+{
+  "rules": {
+    "admin_users": {
+      ".read": false,
+      ".write": false
+    },
+    "users": {
+      ".read": "auth != null",
+      "$uid": {
+        ".write": "auth != null && $uid === auth.uid"
+      },
+      ".indexOn": [
+        "createdAt",
+        "phoneNumber"
+      ]
+    },
+    "myPosts": {
+      "$uid": {
+        ".read": "auth != null",
+        ".write": "auth != null && $uid === auth.uid"
+      }
+    },
+    "posts": {
+      ".read": "auth != null",
+      "$postId": {
+        ".write": "auth != null"
+      },
+      ".indexOn": [
+        "uid"
+      ]
+    },
+    "topSongs": {
+      ".read": "auth != null",
+      ".write": "auth != null && root.child('admin_users').child(auth.uid).exists()"
+    },
+    "musicVideos": {
+      ".read": "auth != null",
+      "$mvId": {
+        ".write": "auth != null && (root.child('admin_users').child(auth.uid).exists() || newData.exists() && data.exists())"
+      }
+    },
+    "musicVideosBZ": {
+      ".read": "auth != null",
+      "$mvId": {
+        ".write": "auth != null && (root.child('admin_users').child(auth.uid).exists() || newData.exists() && data.exists())"
+      }
+    },
+    "following": {
+      ".read": "auth != null",
+      "$uid": {
+        ".write": "auth != null && auth.uid === $uid"
+      }
+    },
+    "followers": {
+      ".read": "auth != null",
+      "$uid": {
+        "$followerUid": {
+          ".write": "auth != null && auth.uid === $followerUid",
+          ".validate": "$uid !== $followerUid"
+        }
+      }
+    },
+    "feed": {
+      ".read": "auth != null",
+      ".write": "auth != null"
+    },
+    "reportedAbuse": {
+      ".write": "auth != null"
+    },
+    "isSwapLimitOn": {
+      ".read": "auth != null"
+    },
+    "usageMetrics": {
+      ".read": "auth != null",
+      ".write": "auth != null"
+    },
+    "popular": {
+      ".read": "auth != null",
+      "$mvId": {
+        ".write": "auth != null && (root.child('admin_users').child(auth.uid).exists() || newData.exists() && data.exists())"
+      }
+    },
+    "followingFeed": {
+      ".read": "auth != null",
+      ".write": "auth != null"
+    },
+    "invites": {
+      ".read": "auth != null",
+      ".write": "auth != null"
+    },
+    "analytics": {
+      ".read": "auth != null",
+      "$mvId": {
+        ".write": "auth != null && (root.child('admin_users').child(auth.uid).exists() || newData.exists() && data.exists())"
+      }
+    },
+    "trending": {
+      ".read": "auth != null",
+      ".write": "auth != null"
+    }
+  }
+}
